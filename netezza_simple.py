@@ -166,7 +166,7 @@ def redcap_upload(ritm_config_dict):
     #print(r_ex)
 #    print('\n\n\n')
     print(r_imp)
-    return 'Upload complete - %s' % r_imp
+    return r_imp
      
 
 
@@ -213,10 +213,9 @@ def main():
     ##############################################################################################################
         
     #Get configuration file from input
-    input_config = sys.argv[1]
+    #input_config = sys.argv[1]
     #Manually specify config file for testing
-    #input_config = 'U:/UWHealth/EA/SpecialShares/DM/CRDS/AdHocQueries/Report_Automation/SAMPLE_RITMS/AUTO_TEST_01/automation_scripts_config_be_careful/AUTO_TEST_01.cfg'
-    #input_config = 'U:/UWHealth/EA/SpecialShares/DM/CRDS/AdHocQueries/Requests_DATA/recurring_requests/DATA_Elezaby_RITM0416570/Automation/automation_scripts_config_be_careful/Elezaby_RITM0416570_RECURRING_CONFIG.cfg'
+    input_config = 'U:/UWHealth/EA/SpecialShares/DM/CRDS/AdHocQueries/Report_Automation/SAMPLE_RITMS/AUTO_TEST_01/automation_scripts_config_be_careful/AUTO_TEST_01.cfg'
     write_to_log(daily_log_file_path, input_config, 'kicked off job')  #To main log
     ##############################################################################################################
     
@@ -272,9 +271,12 @@ def main():
         write_to_log(daily_log_file_path, input_config, 'No records uploaded today\n')
     ##############################################################################################################
 
+    er = False
+    if 'ERROR' in post_message.upper():
+        er = True
 
     ##Send email to Study Team
-    if row_count > 0:
+    if row_count > 0 & er is False:
         team_subject = ritm_config_dict['email_subject']
         team_message = read_sql_file(ritm_config_dict['automation_dir_path'] + ritm_config_dict['email_text'])  #Get custom email message for this request
         team_message = team_message % row_count  #Add number of records to email message. Message text file needs %s in text.

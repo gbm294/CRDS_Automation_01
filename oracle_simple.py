@@ -153,7 +153,7 @@ def redcap_upload(ritm_config_dict):
     #print(r_ex)
 #    print('\n\n\n')
     print(r_imp)
-    return 'Upload complete - %s' % r_imp
+    return r_imp
      
 
 
@@ -252,9 +252,12 @@ def main():
         write_to_log(daily_log_file_path, input_config, 'No records uploaded today\n')
     ##############################################################################################################
 
+    er = False
+    if 'ERROR' in post_message.upper():
+        er = True
 
     ##Send email to Study Team
-    if row_count > 0:
+    if row_count > 0 & er is False:
         team_subject = ritm_config_dict['email_subject']
         team_message = read_sql_file(ritm_config_dict['automation_dir_path'] + ritm_config_dict['email_text'])  #Get custom email message for this request
         team_message = team_message % row_count  #Add number of records to email message. Message text file needs %s in text.
