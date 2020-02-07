@@ -3,7 +3,8 @@
 Spyder Editor
 
 This is a temporary script file.
-I'm testing a change in this file.
+
+I removed a line and am testing this with GitHub
 """
 
 
@@ -14,7 +15,7 @@ def print_gm():
 ##Import needed libraries
 #Get scripts needed for recurring reports, like password encryption
 import sys
-sys.path.append('U:\\UWHealth\\EA\\SpecialShares\\DM\\CRDS\\AdHocQueries\\Requests_DATA\\recurring_requests\\RECURRING_RESOURCES')
+sys.path.append('U:/UWHealth/EA/SpecialShares/DM/CRDS/AdHocQueries/Requests_DATA/recurring_requests/RECURRING_RESOURCES')
 import time
 import os
 from datetime import datetime
