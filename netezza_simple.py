@@ -213,9 +213,9 @@ def main():
     ##############################################################################################################
         
     #Get configuration file from input
-    #input_config = sys.argv[1]
+    input_config = sys.argv[1]
     #Manually specify config file for testing
-    input_config = 'U:/UWHealth/EA/SpecialShares/DM/CRDS/AdHocQueries/Report_Automation/SAMPLE_RITMS/AUTO_TEST_01/automation_scripts_config_be_careful/AUTO_TEST_01.cfg'
+    #input_config = 'U:/UWHealth/EA/SpecialShares/DM/CRDS/AdHocQueries/Report_Automation/SAMPLE_RITMS/AUTO_TEST_01/automation_scripts_config_be_careful/AUTO_TEST_01.cfg'
     write_to_log(daily_log_file_path, input_config, 'kicked off job')  #To main log
     ##############################################################################################################
     
@@ -272,7 +272,7 @@ def main():
     ##############################################################################################################
 
     er = False
-    if 'ERROR' in post_message.upper():
+    if 'ERROR' in post_message.upper() or 'FAILED' in post_message.upper():
         er = True
 
     ##Send email to Study Team
