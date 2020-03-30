@@ -153,7 +153,7 @@ def redcap_upload(ritm_config_dict):
     #print(r_ex)
 #    print('\n\n\n')
     print(r_imp)
-    return 'Upload complete - %s' % r_imp
+    return r_imp
      
 
 
@@ -202,7 +202,7 @@ def main():
     #Get configuration file from input
     #input_config = sys.argv[1]
     #Manually specify config file for testing
-    input_config = 'U:/UWHealth/EA/SpecialShares/DM/CRDS/AdHocQueries/Requests_DATA/recurring_requests/DATA_Pulia_RITM0688928/Automation/automation_scripts_config_be_careful/Pulia_RITM0688928_config.cfg'
+    input_config = 'U:/UWHealth/EA/SpecialShares/DM/CRDS/AdHocQueries/Requests_DATA/recurring_requests/DATA_Hancock_RITM0682061/Automation/automation_scripts_config_be_careful/Hancock_RITM0682061_config.cfg'
     #input_config = 'U:/UWHealth/EA/SpecialShares/DM/CRDS/AdHocQueries/Requests_DATA/recurring_requests/DATA_OConnell_RITM0658672/Automation/automation_scripts_config_be_careful/RITM0658672_OCONNELL_RECURRING_CONFIG.cfg'
     write_to_log(daily_log_file_path, input_config, 'kicked off job')  #To main log
     ##############################################################################################################
@@ -212,6 +212,15 @@ def main():
     ritm_config_dict = setup_filenames(input_config)
     #RITM Specific logging file
     ritm_log_file_path = ritm_config_dict['automation_dir_path'] + ritm_config_dict['log_file']
+    
+    ##Check IRB Date
+    dt_format = '%Y-%m-%d' #'%m/%d/%Y'#
+    print(ritm_config_dict['irb_date'])
+    if datetime.strptime(ritm_config_dict['irb_date'], dt_format) < datetime.today():
+        print('IRB expired - stopping script')
+        write_to_log(ritm_log_file_path, input_config, 'IRB expired - stopping script')
+        sys.exit()
+
     #script_name = os.path.basename(__file__)
     write_to_log(ritm_log_file_path, input_config, 'started script')  #To specific RITM Log
     ##############################################################################################################
@@ -252,9 +261,12 @@ def main():
         write_to_log(daily_log_file_path, input_config, 'No records uploaded today\n')
     ##############################################################################################################
 
+    er = False
+    if 'ERROR' in post_message.upper():
+        er = True
 
     ##Send email to Study Team
-    if row_count > 0:
+    if row_count > 0 & er is False:
         team_subject = ritm_config_dict['email_subject']
         team_message = read_sql_file(ritm_config_dict['automation_dir_path'] + ritm_config_dict['email_text'])  #Get custom email message for this request
         team_message = team_message % row_count  #Add number of records to email message. Message text file needs %s in text.
