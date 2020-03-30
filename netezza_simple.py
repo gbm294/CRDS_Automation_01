@@ -224,6 +224,15 @@ def main():
     ritm_config_dict = setup_filenames(input_config)
     #RITM Specific logging file
     ritm_log_file_path = ritm_config_dict['automation_dir_path'] + ritm_config_dict['log_file']
+    
+    ##Check IRB Date
+    dt_format = '%Y-%m-%d' #'%m/%d/%Y'#
+    print(ritm_config_dict['irb_date'])
+    if datetime.strptime(ritm_config_dict['irb_date'], dt_format) < datetime.today():
+        print('IRB expired - stopping script')
+        write_to_log(ritm_log_file_path, input_config, 'IRB expired - stopping script')
+        sys.exit()
+        
     #script_name = os.path.basename(__file__)
     write_to_log(ritm_log_file_path, input_config, 'started script')  #To specific RITM Log
     ##############################################################################################################
